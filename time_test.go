@@ -1,8 +1,9 @@
 package tidy
 
-import "testing"
-
-import "time"
+import (
+	"testing"
+	"time"
+)
 
 // JavaScript Date object `Date.parse` method return string format is `RFC2822` or `ISO8601`
 func Test_TimeParse(t *testing.T) {
@@ -13,7 +14,13 @@ func Test_TimeParse(t *testing.T) {
 		return
 	}
 
-	if ss := origin.Local().Format("2006-01-02 15:04:05"); ss != "2019-11-07 15:32:37" {
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		t.Errorf("load location error %v", err)
+		return
+	}
+
+	if ss := origin.In(loc).Format("2006-01-02 15:04:05"); ss != "2019-11-07 15:32:37" {
 		t.Errorf("location time format error %v", err)
 		return
 	}
